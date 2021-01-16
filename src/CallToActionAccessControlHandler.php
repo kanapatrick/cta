@@ -18,6 +18,12 @@ class CallToActionAccessControlHandler extends EntityAccessControlHandler {
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
     /** @var \Drupal\cta\CallToActionInterface $entity */
+    // Check the admin_permission as defined in your @ContentEntityType
+    // annotation.
+    $admin_permission = $this->entityType->getAdminPermission();
+    if ($account->hasPermission($admin_permission)) {
+      return AccessResult::allowed();
+    }
 //    switch ($operation) {
 //      case 'view':
 //        if (!$entity->isPublished()) {
@@ -40,6 +46,12 @@ class CallToActionAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
+    // Check the admin_permission as defined in your @ContentEntityType
+    // annotation.
+    $admin_permission = $this->entityType->getAdminPermission();
+    if ($account->hasPermission($admin_permission)) {
+      return AccessResult::allowed();
+    }
     return AccessResult::allowedIfHasPermission($account, 'add call to action entities');
   }
 
